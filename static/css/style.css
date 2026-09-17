@@ -1,0 +1,7 @@
+/* در static/css/style.css که ساختید */
+.swiper-slide img {
+    width: 100%;
+    height: 45vw;       /* ارتفاع بر اساس عرض صفحه محاسبه می‌شه */
+    max-height: 400px;
+    object-fit: cover;
+}

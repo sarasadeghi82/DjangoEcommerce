@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">مدیریت اسلایدر</h2>
+
+<a href="{% url 'core:slider_create' %}" class="btn btn-success mb-3">+ افزودن اسلاید جدید</a>
+
+<div class="row">
+    {% for slider in sliders %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="{{ slider.image.url }}" class="card-img-top" style="height: 150px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">{{ slider.title }}</h5>
+                <p class="text-muted">ترتیب: {{ slider.order }}</p>
+                <a href="{% url 'core:slider_edit' slider.pk %}" class="btn btn-warning btn-sm">ویرایش</a>
+                <a href="{% url 'core:slider_delete' slider.pk %}" class="btn btn-danger btn-sm">حذف</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>هنوز اسلایدی ثبت نشده.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

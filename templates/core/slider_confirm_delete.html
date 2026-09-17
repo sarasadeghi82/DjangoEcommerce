@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">حذف اسلاید</h2>
+<p>آیا مطمئنید می‌خواید اسلاید «{{ slider.title }}» رو حذف کنید؟</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">بله، حذف کن</button>
+    <a href="{% url 'core:slider_management' %}" class="btn btn-secondary">انصراف</a>
+</form>
+
+{% endblock %}

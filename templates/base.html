@@ -1,0 +1,86 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}فروشگاه کامپیوتر{% endblock %}</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'core:home' %}">فروشگاه کامپیوتر</a>
+
+        <div class="d-flex align-items-center gap-3">
+
+            {% if user.is_authenticated %}
+
+                <!-- دراپ‌داون داشبورد مدیریت (فقط admin/staff) -->
+                {% if user.role == 'admin' or user.role == 'staff' %}
+                <div class="dropdown">
+                    <a class="text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        داشبورد مدیریت
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'orders:management' %}">مدیریت سفارش‌ها</a></li>
+                        {% if user.role == 'admin' %}
+                        <li><a class="dropdown-item" href="{% url 'reports:sales' %}">گزارش فروش</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:user_management' %}">مدیریت کاربران</a></li>
+                        <li><a class="dropdown-item" href="{% url 'core:slider_management' %}">مدیریت اسلایدر</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- دراپ‌داون پروفایل کاربر -->
+                <div class="dropdown">
+                    <a class="text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> {{ user.username }}
+                    </a>    
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">اطلاعات حساب من</a></li>
+                        <li><a class="dropdown-item" href="{% url 'orders:my_orders' %}">سفارش‌های من</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:change_password' %}">تغییر رمز</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">خروج</a></li>
+                    </ul>
+                </div>
+
+            {% else %}
+                <a href="{% url 'accounts:login' %}" class="text-white">ورود</a>
+                <a href="{% url 'accounts:signup' %}" class="text-white">ثبت‌نام</a>
+            {% endif %}
+
+            <!-- سبد خرید با badge - آخرین آیتم = چپ‌ترین موقعیت در RTL -->
+            <a href="{% url 'orders:cart_detail' %}" class="text-white position-relative">
+                <i class="bi bi-cart3 fs-5"></i>
+                {% if cart_item_count > 0 %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ cart_item_count }}
+                </span>
+                {% endif %}
+            </a>
+
+        </div>
+    </div>
+</nav>
+
+<main class="container my-4">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">© فروشگاه کامپیوتر</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

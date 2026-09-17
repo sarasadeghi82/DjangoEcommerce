@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="list-group">
+            <a href="{% url 'accounts:profile' %}" class="list-group-item list-group-item-action active">اطلاعات حساب من</a>
+            <a href="{% url 'orders:my_orders' %}" class="list-group-item list-group-item-action">سفارش‌های من</a>
+            <a href="{% url  }" class="list-group-item list-group-item-action">تغییر رمز</a>
+            <a href="{% url 'accounts:logout' %}" class="list-group-item list-group-item-action text-danger">خروج</a>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h2 class="mb-4">اطلاعات حساب من</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="col-md-8">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">نام کاربری</label>
+                <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                <small class="text-muted">نام کاربری قابل تغییر نیست.</small>
+            </div>
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

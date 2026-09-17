@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <h5>دسته‌بندی‌ها</h5>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="{% url 'products:list' %}">همه محصولات</a></li> <!-- app_name:url_name-->>
+            {% for category in categories %}
+            <li class="list-group-item">
+                <a href="{% url 'products:list' %}?category={{ category.slug }}">{{ category.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-md-9">
+
+      {% if user.role == 'admin' or user.role == 'staff' %}
+       <a href="{% url 'products:create' %}" class="btn btn-success mb-3">+ افزودن محصول جدید</a>
+      {% endif %}
+
+
+        <h2 class="mb-4">محصولات</h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">{{ product.price }} تومان</p>
+                        <a href="{% url 'products:detail' product.pk %}" class="btn btn-primary mt-auto">مشاهده</a>
+
+                        
+                        {% if user.role == 'admin' or user.role == 'staff' %}
+                         <a href="{% url 'products:edit' product.pk %}" class="btn btn-warning btn-sm mt-1">ویرایش</a>
+                         <a href="{% url 'products:delete' product.pk %}" class="btn btn-danger btn-sm mt-1">حذف</a>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>محصولی یافت نشد.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

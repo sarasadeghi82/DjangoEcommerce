@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">مدیریت کاربران</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>نام کاربری</th>
+            <th>ایمیل</th>
+            <th>تاریخ عضویت</th>
+            <th>نقش فعلی</th>
+            <th>وضعیت</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.date_joined|date:"Y/m/d" }}</td>
+            <td>
+                <form method="post" action="{% url 'accounts:user_update_role' u.id %}" class="d-flex gap-2 align-items-center">
+                    {% csrf_token %}
+                    <select name="role" class="form-select form-select-sm" {% if u == user %}disabled{% endif %}>
+                        {% for value, label in u.ROLE_CHOICES %}
+                        <option value="{{ value }}" {% if u.role == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" name="is_active" class="form-check-input"
+                               id="isActive{{ u.id }}"
+                               {% if u.is_active %}checked{% endif %}
+                               {% if u == user %}disabled{% endif %}>
+                        <label class="form-check-label" for="isActive{{ u.id }}">فعال</label>
+                    </div>
+
+                    {% if u != user %}
+                    <button type="submit" class="btn btn-sm btn-primary">ثبت</button>
+                    {% endif %}
+                </form>
+            </td>
+            <td>
+                {% if u.is_active %}
+                    <span class="badge bg-success">فعال</span>
+                {% else %}
+                    <span class="badge bg-danger">مسدود</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">کاربری یافت نشد.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

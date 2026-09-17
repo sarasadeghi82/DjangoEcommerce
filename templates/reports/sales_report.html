@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">گزارش فروش</h2>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-auto">
+        <label class="form-label">از تاریخ</label>
+        <input type="date" name="start" value="{{ start_date }}" class="form-control">
+    </div>
+    <div class="col-auto">
+        <label class="form-label">تا تاریخ</label>
+        <input type="date" name="end" value="{{ end_date }}" class="form-control">
+    </div>
+    <div class="col-auto d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">اعمال فیلتر</button>
+        <a href="{% url 'reports:sales' %}" class="btn btn-secondary ms-2">حذف فیلتر</a>
+    </div>
+</form>
+
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">پرفروش‌ترین محصولات (تعداد فروش)</h5>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="topProductsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">فروش بر اساس دسته‌بندی (مبلغ)</h5>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="categorySalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">فروش بر اساس مشتری (مبلغ)</h5>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="customerSalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+};
+
+new Chart(document.getElementById('topProductsChart'), {         // new Chart(کجا_رسم_کنم, چطور_رسم_کنم)
+    type: 'bar',
+    data: {
+        labels: {{ product_labels|safe }},
+        datasets: [{
+            label: 'تعداد فروش',
+            data: {{ product_data|safe }},
+            backgroundColor: '#0d6efd',
+        }]
+    },
+    options: commonOptions
+});
+
+new Chart(document.getElementById('categorySalesChart'), {
+    type: 'pie',
+    data: {
+        labels: {{ category_labels|safe }},
+        datasets: [{
+            data: {{ category_data|safe }},
+            backgroundColor: ['#0d6efd', '#dc3545', '#198754', '#ffc107', '#6f42c1'],
+        }]
+    },
+    options: commonOptions
+});
+
+new Chart(document.getElementById('customerSalesChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ customer_labels|safe }},
+        datasets: [{
+            label: 'مبلغ خرید (تومان)',
+            data: {{ customer_data|safe }},
+            backgroundColor: '#198754',
+        }]
+    },
+    options: commonOptions
+});
+</script>
+
+{% endblock %}

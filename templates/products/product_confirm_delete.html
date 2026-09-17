@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">حذف محصول</h2>
+<p>آیا مطمئنید می‌خواید محصول «{{ product.name }}» رو حذف کنید؟</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">بله، حذف کن</button>
+    <a href="{% url 'products:list' %}" class="btn btn-secondary">انصراف</a>
+</form>
+
+{% endblock %}
