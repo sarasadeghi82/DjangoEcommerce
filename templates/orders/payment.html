@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col-md-6 mx-auto">
+    <h2 class="mb-4">پرداخت سفارش #{{ order.id }}</h2>
+
+    <div class="alert alert-warning">
+        <strong>توجه:</strong> این یک صفحه شبیه‌سازی‌شده پرداخت است. هیچ تراکنش واقعی انجام نمی‌شود.
+        برای تست موفق، شماره کارت را با رقم <strong>4</strong> شروع کنید.
+    </div>
+
+    <h4 class="mb-3">مبلغ قابل پرداخت: {{ order.total_price }} تومان</h4>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">شماره کارت</label>
+            <input type="text" name="card_number" class="form-control" maxlength="16" placeholder="مثال: 4111111111111111" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">تاریخ انقضا</label>
+            <input type="text" name="expiry" class="form-control" placeholder="MM/YY" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">رمز دوم / CVV2</label>
+            <input type="text" name="cvv" class="form-control" maxlength="4" required>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">پرداخت</button>
+    </form>
+</div>
+
+{% endblock %}

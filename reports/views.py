@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.db.models import Sum , F
 from django.utils import timezone
 from datetime import timedelta
-from orders.models import OrderItem
+from orders.models import OrderItem , Order
 from accounts.decorators import role_required
 import json
 from datetime import datetime, date
-
+from accounts.models import User
 
 
 def parse_date_param(value):
@@ -27,7 +27,7 @@ def sales_report(request):
 
 
     items = OrderItem.objects.all()
-    # order__status__in=['processing', 'shipped', 'completed'] )
+
 
     if start_date:
         items = items.filter(order__created_at__date__gte=start_date)
@@ -41,7 +41,7 @@ def sales_report(request):
         items.values('product__name').annotate(total_quantity=Sum('quantity')).order_by('-total_quantity')[:5]
     )
 
-    product_labels = [item['product__name'] for item in top_products]    #list comprehension --> list 
+    product_labels = [item['product__name']  for item in top_products]    #list comprehension --> list 
     product_data   = [item['total_quantity'] for item in top_products]
 
     #---------------------------------------------------------------------------------------------------------
@@ -65,10 +65,18 @@ def sales_report(request):
         .annotate(total_spent=Sum(F('price') * F('quantity')))
         .order_by('-total_spent')[:5]
     )
+
+
     customer_labels = [item['order__user__username'] for item in customer_sales]
     customer_data   = [float(item['total_spent']) for item in customer_sales]
 
     #--------------------------------------------------------------------------------------------------------------
+
+    users= User.objects.all()
+    username_labels = [user.username for user in users]
+    username_data   = [user.orders.count() for user in users]
+
+
 
     context = {
         'product_labels':  json.dumps(product_labels, ensure_ascii=False),
@@ -77,6 +85,8 @@ def sales_report(request):
         'category_data':   json.dumps(category_data),
         'customer_labels': json.dumps(customer_labels, ensure_ascii=False),
         'customer_data':   json.dumps(customer_data),
+        'username_labels': json.dumps(username_labels, ensure_ascii=False),
+        'username_data':   json.dumps(username_data),
         'start_date': start_date or '',
         'end_date': end_date or '',
     }

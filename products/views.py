@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Brand
-from accounts.decorators import role_required
+from accounts.decorators import role_required, login_required
+from orders.cart import Cart
+from django.core.exceptions import PermissionDenied
 
 
 
@@ -22,7 +24,9 @@ def product_list(request):
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    context = {'product': product}
+    cart = Cart(request)
+    cart_quantity = cart.get_quantity(product)
+    context = {'product': product , 'cart_quantity': cart_quantity }
     return render(request, 'products/product_detail.html', context)
 
 
@@ -77,8 +81,13 @@ def product_delete(request, pk):
     return render(request, 'products/product_confirm_delete.html', {'product': product})
 
 
-    
 
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    cart = Cart(request)
+    cart_quantity = cart.get_quantity(product)
+    context = {'product': product, 'cart_quantity': cart_quantity}
+    return render(request, 'products/product_detail.html', context)
 
 
 

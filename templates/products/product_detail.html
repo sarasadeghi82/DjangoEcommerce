@@ -13,9 +13,22 @@
         <p class="text-muted">{{ product.category }} | {{ product.brand }}</p>
         <h4 class="text-primary">{{ product.price }} تومان</h4>
         <p>{{ product.description }}</p>
-        <p>موجودی: {{ product.stock }} عدد</p>
-        <a href="{% url 'orders:cart_add' product.id %}" class="btn btn-success">افزودن به سبد خرید</a>
         
+         {% if product.stock %}
+         <p>موجودی: {{ product.stock }} عدد</p>  
+         {% if cart_quantity > 0 %}
+          <div class="d-flex align-items-center gap-2">
+            <a href="{% url 'orders:cart_decrease' product.id %}" class="btn btn-outline-secondary btn-sm">−</a>
+            <span class="fs-5">{{ cart_quantity }}</span>
+            <a href="{% url 'orders:cart_add' product.id %}" class="btn btn-outline-secondary btn-sm">+</a>
+          </div>
+         {% else %}
+          <a href="{% url 'orders:cart_add' product.id %}" class="btn btn-success">افزودن به سبد خرید</a>
+         {% endif %}
+         
+         {% else %}
+           <p>  ناموجود </p>  
+         {% endif %}
 
         {% if user.role == 'admin' or user.role == 'staff' %}
           <a href="{% url 'products:edit' product.pk %}" class="btn btn-warning btn-sm mt-1">ویرایش</a>

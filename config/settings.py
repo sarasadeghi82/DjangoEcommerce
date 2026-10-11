@@ -87,10 +87,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+       'USER': os.environ.get('DB_USER'),
+       'PASSWORD': os.environ.get('DB_PASSWORD'),
+       'HOST': os.environ.get('DB_HOST'),
+       'PORT': os.environ.get('DB_PORT'),
     }
 }
 
@@ -147,12 +147,13 @@ AUTH_USER_MODEL = 'accounts.User'    # don't use built-in user , use custom user
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 
 
-LOGIN_URL = 'accounts:login'            # when funcs with @login_required call the the user doesn't login 
+LOGIN_URL = 'accounts:login'            # when funcs with @login_required call the user doesn't login 
 LOGIN_REDIRECT_URL = 'core:home'        # after login 
 LOGOUT_REDIRECT_URL = 'core:home'       # after log out 
 

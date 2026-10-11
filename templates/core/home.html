@@ -7,9 +7,11 @@
     <div class="swiper-wrapper">
         {% for slide in sliders %}
         <div class="swiper-slide">
+            {% if slide.image %}
             <a href="{{ slide.link }}">
             <img src="{{ slide.image.url }}" class="w-100" style="height: 300px; object-fit: cover;" alt="{{ slide.title }}">
             </a>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

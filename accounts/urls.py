@@ -6,7 +6,9 @@ from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordCha
 app_name = 'accounts'
 
 urlpatterns = [
+ 
     path('login/', LoginView.as_view(template_name='accounts/login.html'), name='login'),
+    path('login/bypass', LoginView.as_view(template_name='accounts/baypass.html'), name='afterlogin'),
     path('logout/', views.logout_view, name='logout'),
     path('signup/', views.signup_view, name='signup'),
     path('users/', views.user_management, name='user_management'),

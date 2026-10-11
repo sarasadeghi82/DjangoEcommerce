@@ -55,6 +55,27 @@
     </div>
 </div>
 
+
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title"> تعداد خرید بر اساس مشتری </h5>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="Numberbycustomer"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const commonOptions = {
@@ -99,6 +120,35 @@ new Chart(document.getElementById('customerSalesChart'), {
     },
     options: commonOptions
 });
+
+
+new Chart(document.getElementById('Numberbycustomer'), {
+    type: 'bar',
+    data: {
+        labels: {{ username_labels|safe }},
+        datasets: [{
+            label: 'تعداد خرید ',
+            data: {{ username_data|safe }},
+            backgroundColor: '#198754',
+        }]
+    },
+    options: commonOptions
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 {% endblock %}

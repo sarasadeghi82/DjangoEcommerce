@@ -14,7 +14,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('core:home')
+            return render(request, 'accounts/signup.html', {'form': form})
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})
@@ -25,12 +25,10 @@ def logout_view(request):
     return redirect('core:home')
 
 
-
 @role_required('admin')
 def user_management(request):
     users = User.objects.all().order_by('-date_joined')
     return render(request, 'accounts/user_management.html', {'users': users})
-
 
 
 @role_required('admin')

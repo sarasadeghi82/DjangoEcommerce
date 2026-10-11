@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col-md-6 mx-auto text-center">
+    {% if order.is_paid %}
+    <div class="alert alert-success">
+        <h3>پرداخت با موفقیت انجام شد ✓</h3>
+        <p>شماره سفارش: #{{ order.id }}</p>
+        <p>مبلغ: {{ order.total_price }} تومان</p>
+    </div>
+    <a href="{% url 'orders:my_orders' %}" class="btn btn-primary">مشاهده سفارش‌های من</a>
+    {% else %}
+    <div class="alert alert-danger">
+        <h3>پرداخت ناموفق بود ✗</h3>
+        <p>سفارش شما لغو شد. لطفاً دوباره تلاش کنید.</p>
+    </div>
+    <a href="{% url 'orders:cart_detail' %}" class="btn btn-secondary">بازگشت به سبد خرید</a>
+    {% endif %}
+</div>
+
+{% endblock %}
